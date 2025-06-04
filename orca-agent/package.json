@@ -1,0 +1,27 @@
+{
+  "name": "orca-agent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "NODE_OPTIONS=--no-deprecation node dist/main.js",
+    "start:dev": "NODE_OPTIONS=--no-deprecation ts-node src/main.ts",
+    "prepare": "ts-patch install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "ts-patch": "^3.3.0",
+    "typescript": "~5.8.2"
+  },
+  "dependencies": {
+    "@agentica/core": "^0.12.8",
+    "@samchon/openapi": "^3.1.0",
+    "dotenv": "^16.4.7",
+    "openai": "^4.87.3",
+    "typia": "^8.0.3"
+  }
+}
