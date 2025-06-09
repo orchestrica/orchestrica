@@ -1,106 +1,33 @@
+# Table of Contents
+- [Key Features](#key-features)
+- [Roadmap](#roadmap)
+- [License](#license)
+
 <div align="center">
-  <img src="./docs/_static/orca.png" alt="Orchestrica Logo" width="200"/>
+  <img src="./docs/_static/orca-main.png" alt="Orchestrica Logo" width="400"/>
 </div>
 
-Translations: English · [한국어](./translation/README-kor.md)
+Translations: **English** · [한국어](./translation/README-kor.md)
 
 **Orchestrica (Orca)** is a developer-friendly orchestration tool built on top of [Agentica](https://github.com/wrtnlabs/agentica), designed for creating, managing, and coordinating multiple AI agents.
 
-It enables prompt-based or config-based agent deployment, and ensures safe and flexible LLM-centric interactions via the MCP and ACP protocols.
+It enables prompt-based or config-based agent deployment, and ensures safe and flexible LLM-centric interactions.
 
-## Key Features
+# Key Features
 
-- **Agent Orchestration**
-  Dynamically spawns and routes agents based on natural language prompts or CLI commands using LLM reasoning.
+- **Agent Orchestration**  
+  Automatically generates and manages agents based on natural language prompts or predefined CLI commands. Leverages LLM reasoning to determine agent behavior, select appropriate tools, and manage execution flow dynamically. Supports parallel and hierarchical orchestration of multiple agents.
 
 - **Persistence Store**  
-  Stores all conversations and agent states for long-context, persistent interactions.
+  Persists all conversation histories, system messages, and internal agent states to support long-context interactions. Enables memory retrieval, session continuity, and traceable agent behavior.
 
-- **Agent Hub**  
-  Save and reuse frequently used agent templates for rapid deployment and customization.
+- **Agent Template Management**  
+  Allows users to define, save, and reuse agent templates using YAML or JSON format. Templates can include model selection, tool schema, memory scope, and default system prompts, enabling fast bootstrapping of domain-specific agents.
 
-- **Protocol Support**  
-  Supports both the Model Context Protocol (MCP) and Agent Communication Protocol (ACP) for structured and flexible agent communication.
+- **LLM-Centric Interaction Layer**  
+  Centralizes agent behavior around LLM planning and reasoning, enabling adaptive response generation, dynamic function calling, and tool-based augmentation (e.g., search, code generation, or summarization).
 
-- **YAML/JSON-Based Definitions**  
-  Agents can be declared in structured YAML or JSON files and deployed easily via CLI.
-
-## CLI Command Overview
-
-| Command | Description |
-|---------|-------------|
-| `orca prompt` | Sends a natural language prompt and auto-orchestrates agents accordingly |
-| `orca agent create` | Manually create a new agent |
-| `orca agent create-from-template` | Instantiate an agent from a saved template |
-| `orca agent save-template` | Save the current agent settings as a reusable template |
-| `orca agent list` | View running agents |
-| `orca agent remove` | Remove a specific agent |
-| `orca agent logs` | View logs for an agent |
-| `orca agent route` | Manually route messages between agents |
-| `orca history list` | View conversation history for agents |
-| `orca deploy -f` | Deploy agents from a YAML or JSON definition file |
-
-## Common Options
-
-| Option | Description | Example |
-|--------|-------------|---------|
-| `--type` | Specifies the agent role or type | `--type crawler` |
-| `--name` | Sets the agent instance name | `--name news_agent` |
-| `--mcp` | Comma-separated list of MCP tools to enable | `--mcp tools/summarize,tools/fetch-url` |
-| `--acp` | Key-value configuration for ACP settings | `--acp enable-session=true` |
-| `--target` | Routes prompt to a specific agent | `--target summarizer1` |
-| `--channel` | Specifies the routing channel between agents | `--channel grpc` |
-
-## YAML/JSON Agent Definition
-
-### YAML Example
-
-```yaml
-name: news_agent
-type: analyzer
-mcp:
-  - tools/summarize
-  - tools/fetch-url
-acp:
-  enable-session: true
-  shared-context: true
-````
-
-### JSON Example
-
-```json
-{
-  "name": "news_agent",
-  "type": "analyzer",
-  "mcp": ["tools/summarize", "tools/fetch-url"],
-  "acp": {
-    "enable-session": true,
-    "shared-context": true
-  }
-}
-```
-
-### Deployment Command
-
-```bash
-orca deploy -f agent.yaml
-```
-
-## Supported Protocols
-
-### 🔹 Model Context Protocol (MCP)
-
-* Structured interface to inject external resources (files, DB rows, APIs) into prompts
-* Supports tool schemas such as `tools/list`, `tools/execute`
-* Compatible with major LLMs like Claude, GPT, and others
-
-### 🔹 Agent Communication Protocol (ACP)
-
-* Internal protocol for asynchronous message delivery and session-based context sharing
-* Maintains conversation flow using dialogue/session IDs
-* Designed to support future enhancements like session recovery and persistent agent memory
-
-## Roadmap
+# Roadmap
 
 | Version | Features                                              |
 | ------- | ----------------------------------------------------- |
@@ -109,12 +36,6 @@ orca deploy -f agent.yaml
 | 0.3     | YAML/JSON agent deployment, multi-agent planning      |
 | 0.4+    | UI dashboard and advanced visualization               |
 
-## License
+# License
 
 MIT License
-
-## Built With
-
-* [Agentica](https://github.com/wrtnlabs/agentica)
-* [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)
-* [Agent Communication Protocol (ACP)](https://github.com/i-am-bee/acp)
