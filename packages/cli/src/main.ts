@@ -29,6 +29,13 @@ async function createConnector(): Promise<WebSocketConnector<null, IAgenticaRpcL
   return connector;
 }
 
+function getAgentDescription(agentName: string): string {
+  const descriptions = {
+    "orca": "AI agent for orchestration",
+    "orca-mcp-server": "Direct MCP server call agent"
+  } as { [key: string]: string };
+  return descriptions[agentName] || "AI conversational agent";
+}
 
 async function selectAgentMenu(agents: string[]): Promise<string | null> {
   console.clear();
@@ -38,14 +45,62 @@ async function selectAgentMenu(agents: string[]): Promise<string | null> {
       name: "agent",
       message: "Select an agent to interact with:",
       choices: [
-        { name: "🐋 Orca", value: "Orca" },
-        ...agents.filter((a) => a !== "Orca"),
+        ...agents.map(agent => ({
+          name: agent.padEnd(25) + " - " + getAgentDescription(agent),
+          value: agent,
+          short: agent
+        })),
         new inquirer.Separator(),
         "Exit",
       ],
     },
   ]);
   return result.agent === "Exit" ? null : result.agent;
+}
+
+async function handleMcpServerMode(service: Driver<IAgenticaRpcService<"chatgpt">>) {
+  while (true) {
+    try {
+      console.clear();
+      const apiExamples = [
+        "Get User Profile",
+        "Create New Task", 
+        "Update Task Status",
+        "Delete Task",
+        "List All Projects"
+      ];
+
+      const result = await inquirer.prompt([{
+        type: "list",
+        name: "api",
+        message: "Select API example (Ctrl+C to go back):",
+        choices: [...apiExamples, new inquirer.Separator(), "Back to Main Menu"]
+      }]).catch(() => {
+        throw new Error("INTERRUPTED");
+      });
+      
+      if (result.api === "Back to Main Menu") {
+        break;
+      }
+
+      console.log(`Selected API: ${result.api}`);
+      
+      await new Promise<void>((resolve) => {
+        const rl = readline.createInterface({
+          input: process.stdin,
+          output: process.stdout,
+        });
+        rl.question('\nPress Enter to continue...', () => {
+          rl.close();
+          resolve();
+        });
+      });
+      
+    } catch (err) {
+      console.log("\n🔙 Returning to main menu...");
+      break;
+    }
+  }
 }
 
 async function startAgentSession(agentName: string, service: Driver<IAgenticaRpcService<"chatgpt">>) {
@@ -100,7 +155,7 @@ async function main() {
   const connector = await createConnector();
   const service = connector.getDriver();
 
-  const agents = ["Orca", "Agent1", "Agent2", "Agent3"];
+  const agents = ["orca", "orca-mcp-server"];
 
   while (true) {
     const agentName = await selectAgentMenu(agents);
@@ -109,7 +164,12 @@ async function main() {
       connector.close();
       break;
     }
-    await startAgentSession(agentName, service);
+    
+    if (agentName === "orca-mcp-server") {
+      await handleMcpServerMode(service);
+    } else {
+      await startAgentSession(agentName, service);
+    }
   }
 }
 
