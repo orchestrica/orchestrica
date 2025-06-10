@@ -1,0 +1,22 @@
+{
+  "name": "orca",
+  "version": "0.0.1",
+  "description": "Scalable Orchestration for Agentica-Powered AI Agents",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orchestrica/orchestrica.git"
+  },
+  "author": "orca",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/orchestrica/orchestrica/issues"
+  },
+  "homepage": "https://github.com/orchestrica/orchestrica"
+}

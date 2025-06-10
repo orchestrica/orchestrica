@@ -1,6 +1,6 @@
 {
-  "name": "orca-agent",
-  "version": "1.0.0",
+  "name": "@orca/agent",
+  "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -18,10 +18,13 @@
     "typescript": "~5.8.2"
   },
   "dependencies": {
-    "@agentica/core": "^0.12.8",
-    "@samchon/openapi": "^3.1.0",
+    "@agentica/core": "^0.27.3",
+    "@agentica/rpc": "^0.27.3",
+    "@samchon/openapi": "^3.3.0",
     "dotenv": "^16.4.7",
     "openai": "^4.87.3",
-    "typia": "^8.0.3"
+    "tgrid": "^1.1.0",
+    "typia": "^8.2.0",
+    "redis": "^5.5.6"
   }
 }
