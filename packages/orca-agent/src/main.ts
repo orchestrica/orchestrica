@@ -28,7 +28,7 @@ async function main() {
       },
       controllers: [
         {
-          name: "Agent Manager Tool",
+          name: "orca-agent",
           protocol: "class",
           application: typia.llm.application<AgentManagerTool, "chatgpt">(),
           execute: new AgentManagerTool(),
