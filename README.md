@@ -7,7 +7,7 @@
   <img src="./docs/_static/orca-main.png" alt="Orchestrica Logo" width="400"/>
 </div>
 
-Translations: **English** · [한국어](./translation/README-kor.md)
+Translations: **English** · [Korean](./docs/translation/README-kor.md)
 
 **Orchestrica (Orca)** is a developer-friendly orchestration tool built on top of [Agentica](https://github.com/wrtnlabs/agentica), designed for creating, managing, and coordinating multiple AI agents.
 

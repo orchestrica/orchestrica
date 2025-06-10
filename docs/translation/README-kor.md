@@ -4,7 +4,7 @@
 - [라이선스](#라이선스)
 
 <div align="center">
-  <img src="../docs/_static/orca-main.png" alt="Orchestrica Logo" width="400"/>
+  <img src="../_static/orca-main.png" alt="Orchestrica Logo" width="400"/>
 </div>
 
 번역: [English](../README.md) · **한국어**
