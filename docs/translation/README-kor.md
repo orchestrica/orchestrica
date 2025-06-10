@@ -15,6 +15,53 @@
 
 # 주요 기능
 
+```mermaid
+graph TD
+    %% User Requests
+    User1[User 1 Prompt: Summarize recent meeting as code] --> Orca[Orca Agent]
+    User2[User 2 Prompt: Reuse my Python code agent] --> Orca
+
+    %% Agent Routing Path (User 1)
+    Orca -->|User 1 - Route Step 1| SummaryAgent[MeetingSummaryAgent]
+    SummaryAgent -->|User 1 - Summary Output| CodeGenAgent[CodeGeneratorAgent]
+    CodeGenAgent -->|User 1 - Final Code Output| Response1[Response to User 1]
+
+    %% Reuse of Previously Created Agent (User 2)
+    Orca -->|User 2 - Reuse Agent| PythonAgent[PythonCodeAgent]
+    PythonAgent -->|User 2 - Returns with Memory| Response2[Response to User 2]
+
+    %% Memory Storage Section
+    subgraph MemoryStorage[Memory Storage]
+        Mem_Summary[MeetingSummaryAgent Memory]
+        Mem_CodeGen[CodeGeneratorAgent Memory]
+        Mem_Python[PythonCodeAgent Memory]
+    end
+
+    %% Agent-Memory Connection
+    SummaryAgent --> Mem_Summary
+    CodeGenAgent --> Mem_CodeGen
+    PythonAgent --> Mem_Python
+
+    %% Styling: Emphasize User 1 path with thick solid lines
+    linkStyle 2 stroke:#000,stroke-width:3px
+    linkStyle 3 stroke:#000,stroke-width:3px
+    linkStyle 4 stroke:#000,stroke-width:3px
+
+    %% Styling: User 2 flow with dashed lines
+    linkStyle 5 stroke:#666,stroke-width:2px,stroke-dasharray: 5 5
+    linkStyle 6 stroke:#666,stroke-width:2px,stroke-dasharray: 5 5
+
+    %% Node class assignments
+    class User1 user1;
+    class User2 user2;
+    class Orca orca;
+
+    %% Class styles
+    classDef user1 fill:#E6F0FF,stroke:#3399FF,stroke-width:2px;
+    classDef user2 fill:#FFF1E6,stroke:#FF9900,stroke-width:2px;
+    classDef orca fill:#0A2540,stroke:#0A2540,stroke-width:2px,color:#FFFFFF;
+```
+
 - **에이전트 오케스트레이션**  
   자연어 프롬프트 또는 사전 정의된 CLI 명령어를 기반으로 에이전트를 자동 생성 및 관리합니다. LLM의 추론 능력을 활용하여 에이전트의 행동을 결정하고, 적절한 도구를 선택하며 실행 흐름을 동적으로 제어합니다. 병렬 및 계층적인 에이전트 오케스트레이션을 지원합니다.
 
