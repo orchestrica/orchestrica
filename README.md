@@ -82,7 +82,3 @@ graph TD
 | 0.2     | Prompt-based agent orchestration, MCP/ACP integration |
 | 0.3     | YAML/JSON agent deployment, multi-agent planning      |
 | 0.4+    | UI dashboard and advanced visualization               |
-
-# License
-
-MIT License
