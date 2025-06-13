@@ -48,7 +48,13 @@ Commands:
   dashboard       Start Orca dashboard (UI)
   help [command]  display help for command
 ```
-
+## Build
+```sh
+cd packages/cli
+npm run build
+npm link
+orca start
+```
 # Architecture
 
 Orchestrica is built to manage AI agents in a modular and extensible way.
