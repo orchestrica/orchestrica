@@ -1,14 +1,15 @@
 {
   "name": "@orchestrica/cli",
   "version": "0.0.1",
-  "main": "main.ts",
+  "type": "commonjs",
+  "main": "./dist/index.js",
   "bin": {
     "orca": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
-    "start": "NODE_OPTIONS=--no-deprecation ts-node src/index.ts",
-    "start:dev": "NODE_OPTIONS=--no-deprecation ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "start:dev": "ts-node src/index.ts"
   },
   "dependencies": {
     "@agentica/core": "^0.27.3",

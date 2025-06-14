@@ -1,10 +1,10 @@
 # Table of Contents
 - [Key Features](#key-features)
+- [Architecture](#architecture)
 - [Roadmap](#roadmap)
-- [License](#license)
 
 <div align="center">
-  <img src="./docs/_static/orca-main.png" alt="Orchestrica Logo" width="400"/>
+  <img src="./docs/_static/orca-main.png" alt="Orchestrica Logo" width="200"/>
 </div>
 
 Translations: **English** · [Korean](./docs/translation/README-kor.md)
@@ -15,6 +15,57 @@ It enables prompt-based or config-based agent deployment, and ensures safe and f
 
 # Key Features
 
+### 🚀 Agent Orchestration
+- Create and run agents using prompts or CLI commands
+- Agents decide tools and actions on their own
+- Supports running multiple agents in parallel or in sequence
+
+### 💾 Persistence Store
+- Stores conversation history and agent status
+- Helps agents maintain memory and session continuity
+
+### 🧩 Agent Template Management
+- Define agent setups in YAML/JSON and reuse them
+- Quickly launch agents for specific use cases
+
+### 🧠 LLM-Centric Interaction Layer
+- Uses LLM to guide agent logic and decisions
+- Supports smart responses, tool usage, and workflow control
+
+# Setup
+```sh
+npm install @orchestrica/cli
+```
+
+```sh
+Usage: orca [options] [command]
+
+Options:
+  -h, --help      display help for command
+
+Commands:
+  start           Start Orca interactive CLI
+  dashboard       Start Orca dashboard (UI)
+  help [command]  display help for command
+```
+## Build
+```sh
+cd packages/cli
+npm run build
+npm link
+orca start
+```
+# Architecture
+
+Orchestrica is built to manage AI agents in a modular and extensible way.
+
+Below is a simplified architecture flow:
+
+<div align="center">
+  <img src="./docs/_static/orca-diagram.png" alt="Orchestrica diagram"/>
+</div>
+
+### Workflow
 ```mermaid
 graph TD
     %% User Requests
@@ -61,18 +112,6 @@ graph TD
     classDef user2 fill:#FFF1E6,stroke:#FF9900,stroke-width:2px;
     classDef orca fill:#0A2540,stroke:#0A2540,stroke-width:2px,color:#FFFFFF;
 ```
-
-- **Agent Orchestration**  
-  Automatically generates and manages agents based on natural language prompts or predefined CLI commands. Leverages LLM reasoning to determine agent behavior, select appropriate tools, and manage execution flow dynamically. Supports parallel and hierarchical orchestration of multiple agents.
-
-- **Persistence Store**  
-  Persists all conversation histories, system messages, and internal agent states to support long-context interactions. Enables memory retrieval, session continuity, and traceable agent behavior.
-
-- **Agent Template Management**  
-  Allows users to define, save, and reuse agent templates using YAML or JSON format. Templates can include model selection, tool schema, memory scope, and default system prompts, enabling fast bootstrapping of domain-specific agents.
-
-- **LLM-Centric Interaction Layer**  
-  Centralizes agent behavior around LLM planning and reasoning, enabling adaptive response generation, dynamic function calling, and tool-based augmentation (e.g., search, code generation, or summarization).
 
 # Roadmap
 
