@@ -4,7 +4,7 @@ import { getRedisStore } from './memory';
 
 const agentMap = new Map<string, Agentica<"chatgpt">>();
 
-export class AgentManagerTool {
+export class AgentLifecycleTool {
   async createAgent(input: { name: string; prompt: string }) {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const redis = getRedisStore(process.env.REDIS_URL || 'redis://localhost:6379');
@@ -50,9 +50,10 @@ export class AgentManagerTool {
     return input.name + " 삭제됨"
   }
 
-  async routeToAgent(input: { name: string; message: string }) {
+  async directRouteToAgent(input: { name: string; message: string }) {
     const agent = agentMap.get(input.name);
     if (!agent) {
+      console.log(`[AgentManager] Agent ${input.name} not found`);
       return `[AgentManager] Agent ${input.name} not found`;
     }
     const answers = await agent.conversate(input.message);
@@ -69,5 +70,21 @@ export class AgentManagerTool {
     const result = Object.entries(agents).map(([name, prompt]) => `🤖 ${name}: ${prompt}`).join('\n');
     console.log(result);
     return result;
+  }
+}
+export class WorkflowTool {
+  async multiAgentRoute(params: { agentName: string[] }): Promise<any> {
+    const context: Record<string, any> = {};
+    const results: any[] = [];
+
+    for (const step of params.agentName) {
+      console.log("🔍 Received step:", step);
+    }
+
+    return {
+      success: true,
+      results,
+      context,
+    };
   }
 }
