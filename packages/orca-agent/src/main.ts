@@ -1,7 +1,8 @@
 import { Agentica } from "@agentica/core";
-import { AgentManagerTool } from "./tools";
+import { AgentLifecycleTool, WorkflowTool } from "./tools";
 import { AgenticaRpcService, IAgenticaRpcListener, IAgenticaRpcService } from "@agentica/rpc";
 import { Driver, WebSocketServer } from "tgrid";
+import {ORCA_SYSTEM_PROMPT} from './systemPrompt'
 import typia from "typia";
 import dotenv from "dotenv";
 
@@ -28,12 +29,23 @@ async function main() {
       },
       controllers: [
         {
-          name: "orca-agent",
+          name: "orca:agent.lifecycle",
           protocol: "class",
-          application: typia.llm.application<AgentManagerTool, "chatgpt">(),
-          execute: new AgentManagerTool(),
+          application: typia.llm.application<AgentLifecycleTool, "chatgpt">(),
+          execute: new AgentLifecycleTool(),
+        },
+        {
+          name: "orca:agent.workflow",
+          protocol: "class",
+          application: typia.llm.application<WorkflowTool, "chatgpt">(),
+          execute: new WorkflowTool(),
         },
       ],
+      config: {
+        systemPrompt: {
+          initialize: () => ORCA_SYSTEM_PROMPT,
+        },
+      },
     });
 
     const listener: Driver<IAgenticaRpcListener> = acceptor.getDriver();
