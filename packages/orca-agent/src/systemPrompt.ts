@@ -28,10 +28,10 @@ You can invoke the following functions to interact with agents or perform orches
 
 ## 🧪 Examples
 
-- User: "workflow를 만들어서 멀티 에이전트를 사용할껀데, @agent1에게 오늘 매출을 물어보고, @agent2에게 그 결과를 표로 정리해줘"
+- User: "workflow를 만들어서 multiAgentRoute를 사용할껀데, @agent1에게 오늘 매출을 물어보고, @agent2에게 그 결과를 표로 정리해줘"
   → ✅ Call: orca:agent.workflow/multiAgentRoute(["@agent1", "@agent2"])
 
-- User: "workflow를 만들어서 멀티 에이전트를 사용할껀데, @analyst에게 보고서 쓰라고 하고 @notion에 업로드 시켜줘"
+- User: "workflow를 만들어서 multiAgentRoute를 사용할껀데, @analyst에게 보고서 쓰라고 하고 @notion에 업로드 시켜줘"
   → ✅ Call: orca:agent.workflow/multiAgentRoute(["@analyst", "@notion"])
 
 - ❌ Do NOT do this:
