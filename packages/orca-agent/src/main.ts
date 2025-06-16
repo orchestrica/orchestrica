@@ -1,4 +1,4 @@
-import { Agentica } from "@agentica/core";
+import { Agentica, assertHttpController } from "@agentica/core";
 import { AgentLifecycleTool, WorkflowTool } from "./tools";
 import { AgenticaRpcService, IAgenticaRpcListener, IAgenticaRpcService } from "@agentica/rpc";
 import { Driver, WebSocketServer } from "tgrid";
@@ -40,6 +40,17 @@ async function main() {
           application: typia.llm.application<WorkflowTool, "chatgpt">(),
           execute: new WorkflowTool(),
         },
+          // functions from Swagger/OpenAPI
+          assertHttpController({
+            name: "orca:backend.crud",
+            model: "chatgpt",
+            document: await fetch(
+              "http://localhost:8080/openapi.json",
+            ).then(r => r.json()),
+            connection: {
+              host: "http://localhost:8080",
+            },
+          }),
       ],
       config: {
         systemPrompt: {

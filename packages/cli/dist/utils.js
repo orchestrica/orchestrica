@@ -4,7 +4,7 @@ exports.getAgentDescription = getAgentDescription;
 function getAgentDescription(agentName) {
     const descriptions = {
         "orca": "AI agent for orchestration",
-        "orca-mcp-server": "Direct MCP server call agent"
+        "orca-api-server": "Direct API server call"
     };
     return descriptions[agentName] || "AI conversational agent";
 }

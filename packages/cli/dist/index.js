@@ -8,7 +8,7 @@ const program = new commander_1.Command();
 async function main() {
     const connector = await (0, connector_1.createConnector)();
     const service = connector.getDriver();
-    const agents = ["orca", "orca-mcp-server"];
+    const agents = ["orca", "orca-api-server"];
     while (true) {
         const agentName = await (0, menu_1.selectAgentMenu)(agents);
         if (!agentName) {
@@ -16,8 +16,8 @@ async function main() {
             connector.close();
             break;
         }
-        if (agentName === "orca-mcp-server") {
-            await (0, menu_1.handleMcpServerMode)(service);
+        if (agentName === "orca-api-server") {
+            await (0, menu_1.handleAPIServerMode)(service);
         }
         else {
             await (0, connector_1.startAgentSession)(agentName, service);

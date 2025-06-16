@@ -25,7 +25,7 @@ export async function selectAgentMenu(agents: string[]): Promise<string | null> 
   return result.agent === "Exit" ? null : result.agent;
 }
 
-export async function handleMcpServerMode(service: Driver<IAgenticaRpcService<"chatgpt">>) {
+export async function handleAPIServerMode(service: Driver<IAgenticaRpcService<"chatgpt">>) {
   while (true) {
     try {
       console.clear();
