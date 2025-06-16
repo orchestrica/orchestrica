@@ -118,6 +118,6 @@ graph TD
 | Version | Features                                              |
 | ------- | ----------------------------------------------------- |
 | 0.1     | Manual agent creation/removal, logs, template saving  |
-| 0.2     | Prompt-based agent orchestration, MCP/ACP integration |
+| 0.2     | Prompt-based agent orchestration                      |
 | 0.3     | YAML/JSON agent deployment, multi-agent planning      |
 | 0.4+    | UI dashboard and advanced visualization               |
