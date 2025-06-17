@@ -1,5 +1,5 @@
 import { Agentica, assertHttpController } from "@agentica/core";
-import { AgentLifecycleTool, WorkflowTool } from "./tools";
+import { WorkflowTool } from "./tools";
 import { AgenticaRpcService, IAgenticaRpcListener, IAgenticaRpcService } from "@agentica/rpc";
 import { Driver, WebSocketServer } from "tgrid";
 import {ORCA_SYSTEM_PROMPT} from './systemPrompt'
@@ -29,28 +29,32 @@ async function main() {
       },
       controllers: [
         {
-          name: "orca:agent.lifecycle",
-          protocol: "class",
-          application: typia.llm.application<AgentLifecycleTool, "chatgpt">(),
-          execute: new AgentLifecycleTool(),
-        },
-        {
           name: "orca:agent.workflow",
           protocol: "class",
           application: typia.llm.application<WorkflowTool, "chatgpt">(),
           execute: new WorkflowTool(),
         },
-          // functions from Swagger/OpenAPI
-          assertHttpController({
-            name: "orca:backend.crud",
-            model: "chatgpt",
-            document: await fetch(
-              "http://localhost:8080/openapi.json",
-            ).then(r => r.json()),
-            connection: {
-              host: "http://localhost:8080",
-            },
-          }),
+        // functions from Swagger/OpenAPI
+        /*assertHttpController({
+          name: "orca:backend.crud",
+          model: "chatgpt",
+          document: await fetch(
+            "http://localhost:8080/openapi.json",
+          ).then(r => r.json()),
+          connection: {
+            host: "http://localhost:8080",
+          },
+        }),*/
+        /*assertHttpController({
+          name: "orca:monitoring",
+          model: "chatgpt",
+          document: await fetch(
+            "http://localhost:8080/openapi.json",
+          ).then(r => r.json()),
+          connection: {
+            host: "http://localhost:8080",
+          },
+        }),*/
       ],
       config: {
         systemPrompt: {
