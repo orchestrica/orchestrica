@@ -58,7 +58,7 @@ async function main() {
       ],
       config: {
         systemPrompt: {
-          initialize: () => ORCA_SYSTEM_PROMPT,
+          //initialize: () => ORCA_SYSTEM_PROMPT,
         },
       },
     });
