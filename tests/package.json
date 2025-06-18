@@ -1,0 +1,12 @@
+{
+    "name": "@orchestrica/test",
+    "version": "0.0.1",
+    "private": true,
+    "description": "Test",
+    "license": "MIT",
+    "scripts": {
+    },
+    "dependencies": {
+      "@orchestrica/cli": "workspace:^"
+    }
+  }
