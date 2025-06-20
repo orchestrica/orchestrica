@@ -8,21 +8,40 @@ import readline from "readline";
 export async function createConnector(): Promise<WebSocketConnector<null, IAgenticaRpcListener, IAgenticaRpcService<"chatgpt">>> {
   const connector = new WebSocketConnector(null, {
     print: async (evt: { role: string; text: string }) => {
-      console.log(evt.role, evt.text);
+      console.log(`[${evt.role}] ${evt.text}`);
     },
     select: async (evt: any) => {
-      console.log("selector", JSON.stringify(evt.selection, null, 2));
+      const selections = evt.selection || [];
+      const names = selections.map((s: any) => s.name || "(unnamed)").join(", ");
+      console.log(`[select] ${selections.length} selected: ${names}`);
     },
     execute: async (evt: any) => {
-      console.log("execute", JSON.stringify(evt.operation, null, 2), evt.arguments, evt.value);
+      const agent = evt.arguments?.name || "unknown";
+      const fn = evt.operation?.function || "unknownFunction";
+      console.log(`🟡 요청: ${agent} 에이전트에게 '${fn}' 함수 실행 요청`);
     },
     describe: async (evt: { text: string }) => {
-      console.log("describer", evt.text);
+      console.log(`🟢 응답:\n`);
+      const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+      const printWithTyping = async (text: string) => {
+        for (const char of text) {
+          process.stdout.write(char);
+          await delay(5);
+        }
+        process.stdout.write("\n");
+      };
+      const lines = evt.text.split("\n").filter(Boolean);
+      for (const line of lines) {
+        await printWithTyping(`  ${line.trim()}`);
+      }
     },
     assistantMessage: async (evt: any) => {
-      console.log("assistantMessage:", JSON.stringify(evt, null, 2));
+      if (evt.text) {
+        console.log(`🤖 Assistant: ${evt.text}`);
+      }
     },
   });
+
   await connector.connect("ws://localhost:3001");
   return connector;
 }

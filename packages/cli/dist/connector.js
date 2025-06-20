@@ -10,19 +10,25 @@ const readline_1 = __importDefault(require("readline"));
 async function createConnector() {
     const connector = new tgrid_1.WebSocketConnector(null, {
         print: async (evt) => {
-            console.log(evt.role, evt.text);
+            console.log(`[${evt.role}] ${evt.text}`);
         },
         select: async (evt) => {
-            console.log("selector", JSON.stringify(evt.selection, null, 2));
+            const selections = evt.selection || [];
+            const names = selections.map((s) => s.name || "(unnamed)").join(", ");
+            console.log(`[select] ${selections.length} selected: ${names}`);
         },
         execute: async (evt) => {
-            console.log("execute", JSON.stringify(evt.operation, null, 2), evt.arguments, evt.value);
+            console.log(`[execute] ${evt.operation?.function}`, evt.arguments || {});
         },
         describe: async (evt) => {
-            console.log("describer", evt.text);
+            const lines = evt.text.split("\n").filter(Boolean);
+            for (const line of lines) {
+                console.log(`[describe] ${line.trim()}`);
+                await new Promise((r) => setTimeout(r, 150)); // simulate typing delay
+            }
         },
         assistantMessage: async (evt) => {
-            console.log("assistantMessage:", JSON.stringify(evt, null, 2));
+            console.log(`[assistantMessage]`, evt.type || "unknown type");
         },
     });
     await connector.connect("ws://localhost:3001");
