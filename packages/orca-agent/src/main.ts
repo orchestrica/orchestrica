@@ -1,8 +1,15 @@
-import { Agentica, assertHttpController } from "@agentica/core";
+import { Agentica } from "@agentica/core";
 import { WorkflowTool } from "./tools";
 import { AgenticaRpcService, IAgenticaRpcListener, IAgenticaRpcService } from "@agentica/rpc";
 import { Driver, WebSocketServer } from "tgrid";
-import {ORCA_SYSTEM_PROMPT} from './systemPrompt'
+import {
+  COMMON_SYSTEM_PROMPT_EN,
+  INITIALIZE_SYSTEM_PROMPT_EN,
+  SELECT_SYSTEM_PROMPT_EN,
+  EXECUTE_SYSTEM_PROMPT_EN,
+  DESCRIBE_SYSTEM_PROMPT_EN,
+  CANCEL_SYSTEM_PROMPT_EN,
+} from './systemPrompt'
 import typia from "typia";
 import dotenv from "dotenv";
 
@@ -58,7 +65,12 @@ async function main() {
       ],
       config: {
         systemPrompt: {
-          initialize: () => ORCA_SYSTEM_PROMPT,
+          common: () => COMMON_SYSTEM_PROMPT_EN,
+          initialize: () => INITIALIZE_SYSTEM_PROMPT_EN,
+          select: () => SELECT_SYSTEM_PROMPT_EN,
+          execute: () => EXECUTE_SYSTEM_PROMPT_EN,
+          describe: () => DESCRIBE_SYSTEM_PROMPT_EN,
+          cancel: () => CANCEL_SYSTEM_PROMPT_EN,
         },
       },
     });
