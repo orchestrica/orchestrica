@@ -19,6 +19,16 @@ import puppeteer from "puppeteer";
  * Example usage:
  *   const wrapper = new ConversateWrapper(agent);
  *   const reply = await wrapper.conversate({ content: "Hello agent!" });
+ * Conversate with the A.I. chatbot.
+ *
+ * User talks to the A.I. chatbot with the content.
+ *
+ * When the user's conversation implies the A.I. chatbot to execute a
+ * function calling, the returned chat prompts will contain the
+ * function calling information like {@link IAgenticaPromptJson.IExecute}.
+ *
+ * @param input.content The content to talk
+ * @returns List of newly created chat prompts
  */
 class NotionWrapper {
   private agent: Agentica<"chatgpt">;
@@ -46,6 +56,16 @@ class NotionWrapper {
  *
  * Agent functionality exposed:
  * - openUrlInBrowser({ url }): Launches a browser and opens the specified URL using Puppeteer
+ * Conversate with the A.I. chatbot.
+ *
+ * User talks to the A.I. chatbot with the content.
+ *
+ * When the user's conversation implies the A.I. chatbot to execute a
+ * function calling, the returned chat prompts will contain the
+ * function calling information like {@link IAgenticaPromptJson.IExecute}.
+ *
+ * @param input.content The content to talk
+ * @returns List of newly created chat prompts
  */
 class WebBrowserWrapper {
   private agent: Agentica<"chatgpt">;
@@ -261,7 +281,7 @@ export class WorkflowTool {
   /**
    * Create an agent from a template using the given name and store it in memory.
    *
-   * Supported agent templates: "notion", "analyst", and "default".
+   * Supported agent templates: "web", "notion", "analyst", and "default".
    * If the provided name does not match any of the above, the "default" template is used as fallback.
    *
    * @param input Contains the name (unique identifier) and prompt used to initialize the agent.
@@ -424,11 +444,23 @@ export class WebBrowserTool {
    * @returns Success result or error message
    */
   async openUrlInBrowser(params: { url: string }): Promise<any> {
-    const browser = await puppeteer.launch({
-      headless: false, // Use true if you want headless
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-    const page = await browser.newPage();
-    await page.goto(params.url, { waitUntil: "networkidle2" });
+    try {
+      const browser = await puppeteer.launch({
+        headless: false, // Use true if you want headless
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
+      const page = await browser.newPage();
+      await page.goto(params.url, { waitUntil: "networkidle2" });
+      return {
+        success: true,
+        message: `URL "${params.url}" opened successfully.`,
+      };
+    } catch (error: any) {
+      console.error("[WebBrowserTool] Failed to open URL:", error);
+      return {
+        success: false,
+        message: `Failed to open URL: ${error.message || error}`,
+      };
+    }
   }
 }
