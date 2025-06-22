@@ -7,7 +7,7 @@ export default function DashboardLayout() {
 
     return (
         <ToolpadDashboardLayout>
-            <PageContainer>
+            <PageContainer title={''} maxWidth={false}>
                 <Outlet />
             </PageContainer>
         </ToolpadDashboardLayout>

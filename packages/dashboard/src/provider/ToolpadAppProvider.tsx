@@ -57,11 +57,10 @@ const NAVIGATION: Navigation = [
     },
 ];
 
+const SERVICE_NAME = 'Orchestrica';
 const BRANDING = {
-    title: 'Orchestrica',
+    title: SERVICE_NAME,
 };
-
-
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -77,6 +76,34 @@ const demoTheme = createTheme({
             xl: 1536,
         },
     },
+    palette: {
+        primary: {
+            main: '#0A2A49',
+            contrastText: '#FFFFFF'
+        },
+        // secondary: {
+        //     main: '#1C5D99',
+        //     contrastText: '#FFFFFF'
+        // },
+        background: {
+            default: '#F5F7FA',
+            paper: '#F5F7FA',
+        },
+        text: {
+            primary: '#202020',
+            secondary: '#1C5D99',
+
+        },
+        error: {
+            main: '#E53935'
+        },
+        success: {
+            main: '#43A047'
+        },
+        warning: {
+            main: '#FB8C00'
+        }
+    }
 });
 
 export default function ToolpadAppProvider({ children }: { children: ReactNode }) {
