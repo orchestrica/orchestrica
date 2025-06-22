@@ -1,7 +1,10 @@
-function App() {
+import { Outlet } from 'react-router';
+import ToolpadAppProvider from './provider/ToolpadAppProvider';
+
+export default function App() {
   return (
-    <div>App</div>
+    <ToolpadAppProvider>
+      <Outlet />
+    </ToolpadAppProvider >
   );
 }
-
-export default App;
