@@ -24,7 +24,7 @@ const NAVIGATION: Navigation = [
         segment: 'agent',
         title: 'Agent',
         icon: <ShoppingCartIcon />,
-        pattern: '/agent'
+        pattern: 'agent{/:id}*'
     },
     {
         kind: 'divider',

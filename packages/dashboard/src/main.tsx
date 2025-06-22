@@ -3,8 +3,9 @@ import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import App from './App';
 import HomePage from './pages/Home/HomePage';
-import AgentPage from './pages/Agent/AgentPage';
 import DashboardLayout from './components/layout/DashboardLayout/DashboardLayout';
+import AgentListPage from './pages/Agent/AgentListPage';
+import AgentPage from './pages/Agent/Agent/AgentPage';
 
 const router = createBrowserRouter([
   {
@@ -20,13 +21,16 @@ const router = createBrowserRouter([
           },
           {
             path: 'agent',
-            Component: AgentPage,
+            Component: AgentListPage,
           },
-        ],
+          {
+            path: '/agent/:id',
+            Component: AgentPage,
+          }]
       },
     ],
   }
-]);
+])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
