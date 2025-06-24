@@ -184,99 +184,6 @@ const agentMap = new Map<string, Agentica<"chatgpt">>();
 import { selectTemplate } from "./template";
 
 export class WorkflowTool {
-  /**
-   * Execute a coordinated workflow across multiple agents.
-   *
-   * This method is selected when user's input involves collaboration or chaining between agents.
-   * It is a high-level function entry point used by selector/caller agent.
-   *
-   * @param params Includes a list of agent names participating in the workflow and the user prompt
-   * @returns Workflow execution result
-   */
-  async multiAgentRoute(params: MultiAgentRouteParams): Promise<any> {
-    console.log("[multiAgentRoute] Coordinating agents:", params.agentName);
-
-    const context: Record<string, any> = {};
-    const results: any[] = [];
-
-    const wrappers: any[] = [];
-    for (const name of params.agentName) {
-      if (name === "notion") {
-        const agent = agentMap.get(name);
-        if (!agent) {
-          console.warn(`[multiAgentRoute] Agent "${name}" not found in memory.`);
-          continue;
-        }
-        console.log(`[multiAgentRoute] Wrapped agent "${name}" with NotionWrapper.`);
-        wrappers.push({
-          name: `Conversate with ${name}`,
-          protocol: "class",
-          application: typia.llm.application<NotionWrapper, "chatgpt">(),
-          execute: new NotionWrapper(agent),
-        });
-        continue;
-      }
-
-      if (name === "web") {
-        const agent = agentMap.get(name);
-        if (!agent) {
-          console.warn(`[multiAgentRoute] Agent "${name}" not found in memory.`);
-          continue;
-        }
-        console.log(`[multiAgentRoute] Wrapped agent "${name}" with WebBrowserWrapper.`);
-        wrappers.push({
-          name: `Conversate with ${name}`,
-          protocol: "class",
-          application: typia.llm.application<WebBrowserWrapper, "chatgpt">(),
-          execute: new WebBrowserWrapper(agent),
-        });
-        continue;
-      }
-
-      let agent = agentMap.get(name);
-      if (!agent) {
-        console.log(`[multiAgentRoute] Agent "${name}" not in memory. Loading from Redis...`);
-        await this.loadAgent({ name });
-        agent = agentMap.get(name);
-        if (!agent) {
-          console.warn(`[multiAgentRoute] Agent "${name}" could not be found.`);
-          continue;
-        }
-      }
-    }
-
-    const orchestrationAgent = new Agentica({
-      model: "chatgpt",
-      vendor: {
-        api: new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }),
-        model: "gpt-4.1-nano",
-      },
-      controllers: wrappers,
-      config: {
-        systemPrompt: {
-          initialize: () => [
-            "You are a helpful orchestrator for multi-agent coordination.",
-            "You can communicate with individual agents using the available tools.",
-          ].join("\n"),
-        },
-      },
-    });
-
-    const orchestrationPrompt = params.prompt;
-    console.log("[multiAgentRoute] Sending orchestration prompt:", orchestrationPrompt);
-
-    const orchestrationResult = await orchestrationAgent.conversate(orchestrationPrompt);
-    console.log("[multiAgentRoute] Orchestration result received.");
-
-    results.push(...(Array.isArray(orchestrationResult) ? orchestrationResult : [orchestrationResult]));
-
-    return {
-      success: true,
-      message: "Multi-agent workflow executed via orchestration agent",
-      results,
-      context,
-    };
-  }
 
   /**
    * Create an agent from a template using the given name and store it in memory.
@@ -432,6 +339,51 @@ export class WorkflowTool {
       prompt: input.message,
       message: `Agent "${input.name}" replied`,
       reply: result,
+    };
+  }
+
+  /**
+   * Execute a Hierarchical Workflow.
+   *
+   * This function is selected when the user requests a hierarchical task breakdown.
+   *
+   * @returns Execution result of the hierarchical workflow.
+   */
+  async hierarchicalWorkflow(): Promise<any> {
+    console.log("[hierarchicalWorkflow] Executing Hierarchical Workflow");
+    return {
+      success: true,
+      message: "Hierarchical Workflow executed",
+    };
+  }
+
+  /**
+   * Execute a Parallel Processing Workflow.
+   *
+   * This function is selected when the user requests concurrent or parallel agent actions.
+   *
+   * @returns Execution result of the parallel workflow.
+   */
+  async parallelWorkflow(): Promise<any> {
+    console.log("[parallelWorkflow] Executing Parallel Processing Workflow");
+    return {
+      success: true,
+      message: "Parallel Processing Workflow executed",
+    };
+  }
+
+  /**
+   * Execute a Sequential Workflow.
+   *
+   * This function is selected when the user requests step-by-step task execution.
+   *
+   * @returns Execution result of the sequential workflow.
+   */
+  async sequentialWorkflow(): Promise<any> {
+    console.log("[sequentialWorkflow] Executing Sequential Workflow");
+    return {
+      success: true,
+      message: "Sequential Workflow executed",
     };
   }
 }

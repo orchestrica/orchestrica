@@ -13,14 +13,30 @@ You can use the following functions to manage or coordinate agents:
 2. orca:agent.lifecycle/deleteAgent(name: string)
 3. orca:agent.lifecycle/listAgents()
 4. orca:agent.lifecycle/directRouteToAgent(name: string, message: string)
-5. orca:agent.workflow/multiAgentRoute(agentNames: string[])
+
+## 🧠 Selection Categories
+
+Selector must categorize the user's request into one of the following:
+
+1. Agent Lifecycle Management:
+   - If the request is to create, delete, list, or send a message to an agent,
+     choose one of:
+       - orca:agent.lifecycle/createAgent(name: string, prompt: string)
+       - orca:agent.lifecycle/deleteAgent(name: string)
+       - orca:agent.lifecycle/listAgents()
+       - orca:agent.lifecycle/directRouteToAgent(name: string, message: string)
+
+2. Workflow Execution:
+   - If the request is to "create a workflow", "plan tasks", or "coordinate agents",
+     choose one of:
+       - orca:agent.workflow/hierarchicalWorkflow()
+       - orca:agent.workflow/parallelWorkflow()
+       - orca:agent.workflow/sequentialWorkflow()
+
+If the request does not match any of the above, explain the supported functions and prompt the user to rephrase.
+
 
 ## 🧭 Selection Rules
-
-- Use multiAgentRoute when:
-  - Two or more agents (e.g., "@agent1", "@agent2") are mentioned
-  - User uses words like "then", "and", "다음으로", etc.
-  - Coordination or sequencing is implied
 
 - If only one agent is mentioned:
   - Use directRouteToAgent
@@ -29,9 +45,15 @@ You can use the following functions to manage or coordinate agents:
 
 ## ✅ Workflow Decision Examples
 
-- User: "Ask @agent1 then summarize via @agent2" → ✅ multiAgentRoute(["@agent1", "@agent2"])
-- User: "Talk to @agent1" → ✅ directRouteToAgent("@agent1", "message")
 - User: "Create a new agent named 'summarizer'" → ✅ createAgent("summarizer", "...")
+
+## 🧩 Workflow Creation Types
+
+If the user explicitly requests to "create a workflow" or "generate a plan", choose one of the following based on context:
+
+- Hierarchical → orca:agent.workflow/hierarchicalWorkflow()
+- Parallel Processing → orca:agent.workflow/parallelWorkflow()
+- Sequential Workflows → orca:agent.workflow/sequentialWorkflow()
 `;
 
 export const EXECUTE_SYSTEM_PROMPT_EN = `
