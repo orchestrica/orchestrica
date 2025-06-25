@@ -168,6 +168,69 @@ type MultiAgentRouteParams = {
   prompt: string;
 };
 
+/**
+ * DTO for executing a hierarchical workflow with parent-child task delegation.
+ *
+ * Selected when the user implies a tree structure, where one agent's output
+ * feeds into multiple dependent agents. Common phrases: "based on", "children of", "use the result of".
+ *
+ * Example input:
+ * {
+ *   tree: {
+ *     agent: "summarizer",
+ *     children: [
+ *       { agent: "translator" },
+ *       { agent: "analyzer" }
+ *     ]
+ *   }
+ * }
+ */
+type HierarchicalWorkflowInput = {
+  tree: {
+    /** Root agent in the hierarchy (executed first) */
+    agent: string;
+    /** Agents that process the output of the root agent */
+    children?: Array<{ agent: string }>;
+  };
+};
+
+/**
+ * DTO for executing a sequential workflow involving multiple agents.
+ *
+ * Selected when the user asks to run tasks one after another in order,
+ * using keywords like "step-by-step", "then", "after that", or "sequentially".
+ *
+ * Example input:
+ * {
+ *   steps: [
+ *     { agent: "summarizer" },
+ *     { agent: "translator" }
+ *   ]
+ * }
+ */
+type SequentialWorkflowInput = {
+  steps: Array<{
+    /** Name of the agent to invoke at this step */
+    agent: string;
+  }>;
+};
+
+/**
+ * DTO for executing a parallel workflow where agents run concurrently.
+ *
+ * Selected when the user asks to perform multiple tasks at the same time,
+ * using expressions like "run in parallel", "at once", or "simultaneously".
+ *
+ * Example input:
+ * {
+ *   agents: ["summarizer", "translator"]
+ * }
+ */
+type ParallelWorkflowInput = {
+  /** Names of agents to run concurrently */
+  agents: string[];
+};
+
 const agentMap = new Map<string, Agentica<"chatgpt">>();
 
 /**
@@ -345,45 +408,80 @@ export class WorkflowTool {
   /**
    * Execute a Hierarchical Workflow.
    *
-   * This function is selected when the user requests a hierarchical task breakdown.
+   * This function is selected when the user describes a task tree structure,
+   * with one parent agent and children that depend on its result.
    *
-   * @returns Execution result of the hierarchical workflow.
+   * Example input:
+   * {
+   *   tree: {
+   *     agent: "summarizer",
+   *     children: [
+   *       { agent: "translator" },
+   *       { agent: "analyzer" }
+   *     ]
+   *   }
+   * }
+   *
+   * @param input HierarchicalWorkflowInput - A tree of agent relationships.
+   * @returns Execution result
    */
-  async hierarchicalWorkflow(): Promise<any> {
-    console.log("[hierarchicalWorkflow] Executing Hierarchical Workflow");
-    return {
-      success: true,
-      message: "Hierarchical Workflow executed",
-    };
+  async hierarchicalWorkflow(input: HierarchicalWorkflowInput): Promise<any> {
+  console.log("[hierarchicalWorkflow] Received input:", JSON.stringify(input, null, 2));
+  // You can recursively traverse the tree and execute children after parent
+  return {
+    success: true,
+    message: "Hierarchical Workflow executed",
+    input,
+  };
   }
 
   /**
    * Execute a Parallel Processing Workflow.
    *
-   * This function is selected when the user requests concurrent or parallel agent actions.
+   * This function is selected when the user wants to run multiple agents concurrently.
    *
-   * @returns Execution result of the parallel workflow.
+   * Example input:
+   * {
+   *   agents: ["summarizer", "translator"]
+   * }
+   *
+   * @param input ParallelWorkflowInput - A list of agents to run in parallel.
+   * @returns Execution result
    */
-  async parallelWorkflow(): Promise<any> {
-    console.log("[parallelWorkflow] Executing Parallel Processing Workflow");
+  async parallelWorkflow(input: ParallelWorkflowInput): Promise<any> {
+    console.log("[parallelWorkflow] Received input:", JSON.stringify(input, null, 2));
+    // You could parallelize tasks here
     return {
       success: true,
       message: "Parallel Processing Workflow executed",
+      input,
     };
   }
 
   /**
    * Execute a Sequential Workflow.
    *
-   * This function is selected when the user requests step-by-step task execution.
+   * This function is selected when the user wants agents to be executed
+   * step-by-step in the given order.
    *
-   * @returns Execution result of the sequential workflow.
+   * Example input:
+   * {
+   *   steps: [
+   *     { agent: "summarizer" },
+   *     { agent: "translator" }
+   *   ]
+   * }
+   *
+   * @param input SequentialWorkflowInput - An array of agents to execute in sequence.
+   * @returns Execution result
    */
-  async sequentialWorkflow(): Promise<any> {
-    console.log("[sequentialWorkflow] Executing Sequential Workflow");
+  async sequentialWorkflow(input: SequentialWorkflowInput): Promise<any> {
+    console.log("[sequentialWorkflow] Received input:", JSON.stringify(input, null, 2));
+    // You can iterate and invoke agents here in order
     return {
       success: true,
       message: "Sequential Workflow executed",
+      input,
     };
   }
 }
