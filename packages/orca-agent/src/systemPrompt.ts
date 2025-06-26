@@ -43,9 +43,67 @@ If the request does not match any of the above, explain the supported functions 
 
 - Do not use individual lifecycle functions when two or more agents are involved.
 
-## ✅ Workflow Decision Examples
+## 🧠 Workflow Selection Guide
 
-- User: "Create a new agent named 'summarizer'" → ✅ createAgent("summarizer", "...")
+When the user wants to coordinate multiple agents, determine the workflow type and return a function_call with structured arguments.
+
+---
+
+### 1. Hierarchical Workflow
+- **Use When**: The user mentions top-down relationships, dependency trees, or "parent → children" execution.
+- **Keywords**: "hierarchical", "top-down", "tree", "parent", "based on", "feed into"
+- **Function**: orca:agent.workflow/hierarchicalWorkflow
+- **Input Type**: HierarchicalWorkflowInput
+- **JSON Example**:
+  \`\`\`json
+  {
+    "tree": {
+      "agent": "summarizer",
+      "children": [
+        { "agent": "translator" },
+        { "agent": "analyzer" }
+      ]
+    }
+  }
+  \`\`\`
+
+---
+
+### 2. Parallel Workflow
+- **Use When**: The user wants multiple agents to operate simultaneously without ordering.
+- **Keywords**: "at the same time", "in parallel", "concurrently", "together"
+- **Function**: orca:agent.workflow/parallelWorkflow
+- **Input Type**: ParallelWorkflowInput
+- **JSON Example**:
+  \`\`\`json
+  {
+    "agents": ["summarizer", "translator"]
+  }
+  \`\`\`
+
+---
+
+### 3. Sequential Workflow
+- **Use When**: The user asks for agents to be executed in a specific order.
+- **Keywords**: "first", "then", "next", "after that", "step-by-step", "in sequence"
+- **Function**: orca:agent.workflow/sequentialWorkflow
+- **Input Type**: SequentialWorkflowInput
+- **JSON Example**:
+  \`\`\`json
+  {
+    "steps": [
+      { "agent": "summarizer" },
+      { "agent": "translator" }
+    ]
+  }
+  \`\`\`
+
+---
+
+⚠️ Always respond with a structured function_call:
+- Choose the correct function name
+- Use the correct input format and field names based on the workflow type
+- Do not include natural language in the final function_call arguments
 
 ## 🧩 Workflow Creation Types
 
