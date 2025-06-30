@@ -9,13 +9,17 @@ import {
   EXECUTE_SYSTEM_PROMPT_EN,
   DESCRIBE_SYSTEM_PROMPT_EN,
   CANCEL_SYSTEM_PROMPT_EN,
-} from './systemPrompt'
+} from './systemPrompt';
 import typia from "typia";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 async function main() {
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('OPENAI_API_KEY is undefined');
+    return;
+  }
   const server: WebSocketServer<
     null,
     IAgenticaRpcService<"chatgpt">,

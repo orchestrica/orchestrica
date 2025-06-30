@@ -4,6 +4,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import { type Navigation } from '@toolpad/core/AppProvider';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 
@@ -13,7 +14,7 @@ import { ReactNode } from 'react';
 const NAVIGATION: Navigation = [
     {
         kind: 'header',
-        title: 'Main items',
+        title: 'Main',
     },
     {
         segment: '',
@@ -21,17 +22,23 @@ const NAVIGATION: Navigation = [
         icon: <DashboardIcon />,
     },
     {
-        segment: 'agent',
-        title: 'Agent',
-        icon: <ShoppingCartIcon />,
-        pattern: 'agent{/:id}*'
+        segment: 'chat',
+        title: 'Chat',
+        icon: <ChatBubbleIcon />,
     },
+
     {
         kind: 'divider',
     },
     {
         kind: 'header',
         title: 'Analytics',
+    },
+    {
+        segment: 'agent',
+        title: 'Agent',
+        icon: <ShoppingCartIcon />,
+        pattern: 'agent{/:id}*'
     },
     {
         segment: 'reports',
