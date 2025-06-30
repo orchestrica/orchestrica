@@ -13,7 +13,7 @@ const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Orca MCP Server API",
+      title: "Orca API Server API",
       version: "0.1.0",
     },
   },
@@ -25,11 +25,19 @@ export function startServer() {
   const port = process.env.PORT || 8080;
 
   app.use(express.json());
+  app.use((req, _res, next) => {
+    logger.info(`[${req.method}] ${req.originalUrl}`);
+    next();
+  });
   app.use("/agents", agentRoutes);
   app.use("/memory", memoryRoutes);
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.get("/openapi.json", (_req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpec);
+  });
 
   app.listen(port, () => {
-    logger.info(`MCP Server running on port ${port}`);
+    logger.info(`API Server running on port ${port}`);
   });
 }

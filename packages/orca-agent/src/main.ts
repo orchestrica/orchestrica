@@ -1,7 +1,15 @@
 import { Agentica } from "@agentica/core";
-import { AgentManagerTool } from "./tools";
+import { WorkflowTool } from "./tools";
 import { AgenticaRpcService, IAgenticaRpcListener, IAgenticaRpcService } from "@agentica/rpc";
 import { Driver, WebSocketServer } from "tgrid";
+import {
+  COMMON_SYSTEM_PROMPT_EN,
+  INITIALIZE_SYSTEM_PROMPT_EN,
+  SELECT_SYSTEM_PROMPT_EN,
+  EXECUTE_SYSTEM_PROMPT_EN,
+  DESCRIBE_SYSTEM_PROMPT_EN,
+  CANCEL_SYSTEM_PROMPT_EN,
+} from './systemPrompt'
 import typia from "typia";
 import dotenv from "dotenv";
 
@@ -28,12 +36,43 @@ async function main() {
       },
       controllers: [
         {
-          name: "orca-agent",
+          name: "orca:agent.workflow",
           protocol: "class",
-          application: typia.llm.application<AgentManagerTool, "chatgpt">(),
-          execute: new AgentManagerTool(),
+          application: typia.llm.application<WorkflowTool, "chatgpt">(),
+          execute: new WorkflowTool(),
         },
+        // functions from Swagger/OpenAPI
+        /*assertHttpController({
+          name: "orca:backend.crud",
+          model: "chatgpt",
+          document: await fetch(
+            "http://localhost:8080/openapi.json",
+          ).then(r => r.json()),
+          connection: {
+            host: "http://localhost:8080",
+          },
+        }),*/
+        /*assertHttpController({
+          name: "orca:monitoring",
+          model: "chatgpt",
+          document: await fetch(
+            "http://localhost:8080/openapi.json",
+          ).then(r => r.json()),
+          connection: {
+            host: "http://localhost:8080",
+          },
+        }),*/
       ],
+      config: {
+        systemPrompt: {
+          common: () => COMMON_SYSTEM_PROMPT_EN,
+          initialize: () => INITIALIZE_SYSTEM_PROMPT_EN,
+          select: () => SELECT_SYSTEM_PROMPT_EN,
+          execute: () => EXECUTE_SYSTEM_PROMPT_EN,
+          describe: () => DESCRIBE_SYSTEM_PROMPT_EN,
+          cancel: () => CANCEL_SYSTEM_PROMPT_EN,
+        },
+      },
     });
 
     const listener: Driver<IAgenticaRpcListener> = acceptor.getDriver();

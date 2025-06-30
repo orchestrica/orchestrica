@@ -1,11 +1,14 @@
-# Table of Contents
-- [Key Features](#key-features)
-- [Architecture](#architecture)
-- [Roadmap](#roadmap)
+# Orchestrica
 
 <div align="center">
   <img src="./docs/_static/orca-main.png" alt="Orchestrica Logo" width="200"/>
 </div>
+
+<div align="center">
+  <em>LLM agents orchestration made easy — build, manage, and scale your agent workflows with Orchestrica.</em>
+</div>
+
+<br />
 
 Translations: **English** · [Korean](./docs/translation/README-kor.md)
 
@@ -13,26 +16,28 @@ Translations: **English** · [Korean](./docs/translation/README-kor.md)
 
 It enables prompt-based or config-based agent deployment, and ensures safe and flexible LLM-centric interactions.
 
-# Key Features
+## Key Features
 
-### 🚀 Agent Orchestration
+#### 🚀 Agent Orchestration
 - Create and run agents using prompts or CLI commands
 - Agents decide tools and actions on their own
 - Supports running multiple agents in parallel or in sequence
 
-### 💾 Persistence Store
+#### 🐳 Containerized Agent Environment
+- Provides isolated execution environments
+- Eliminates the need for external dependency installation
+- Enables quick setup and system-independent portability
+
+#### 💾 Persistence Store
 - Stores conversation history and agent status
 - Helps agents maintain memory and session continuity
 
-### 🧩 Agent Template Management
-- Define agent setups in YAML/JSON and reuse them
-- Quickly launch agents for specific use cases
-
-### 🧠 LLM-Centric Interaction Layer
+#### 🧠 LLM-Centric Interaction Layer
 - Uses LLM to guide agent logic and decisions
 - Supports smart responses, tool usage, and workflow control
 
-# Setup
+## Quick Start
+> Requires Node.js v18 or higher
 ```sh
 npm install @orchestrica/cli
 ```
@@ -48,14 +53,15 @@ Commands:
   dashboard       Start Orca dashboard (UI)
   help [command]  display help for command
 ```
-## Build
+### Development
 ```sh
+# For local development
 cd packages/cli
 npm run build
 npm link
 orca start
 ```
-# Architecture
+## System Design
 
 Orchestrica is built to manage AI agents in a modular and extensible way.
 
@@ -65,7 +71,7 @@ Below is a simplified architecture flow:
   <img src="./docs/_static/orca-diagram.png" alt="Orchestrica diagram"/>
 </div>
 
-### Workflow
+### Example
 ```mermaid
 graph TD
     %% User Requests
@@ -113,11 +119,19 @@ graph TD
     classDef orca fill:#0A2540,stroke:#0A2540,stroke-width:2px,color:#FFFFFF;
 ```
 
-# Roadmap
+## Development Roadmap (Based on 2025.06.19 Discussion)
 
-| Version | Features                                              |
-| ------- | ----------------------------------------------------- |
-| 0.1     | Manual agent creation/removal, logs, template saving  |
-| 0.2     | Prompt-based agent orchestration, MCP/ACP integration |
-| 0.3     | YAML/JSON agent deployment, multi-agent planning      |
-| 0.4+    | UI dashboard and advanced visualization               |
+| Common                                | Frontend                                                      | Agent / Backend                                                                 | Deployment / Monitoring                                                                   |
+|--------------------------------------|----------------------------------------------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [x] User scenario organization        | [ ] UI publishing (main screen, metrics dashboard, chat view)  | [ ] Agent prompt testing and system prompt refinement                           | [ ] Metric collection pipeline design (OpenTelemetry → Prometheus)       |
+| [ ] Issue tracking tool + Git setup  | [ ] Grafana panel integration for dashboard                   | [x] Agent creation, deletion, saving features                                   | [ ] Define metrics to collect (e.g., function calls, token usage)        |
+|                                      | [ ] Add views based on Swagger-provided API structure          | [ ] Natural language-based agent monitoring                                     | [ ] Docker Compose setup for containerized deployment                    |
+|                                      |                                                                | [ ] Backend API to fetch Agentica metrics via OpenAPI                          |                                                                          |
+|                                      |                                                                | [ ] Integrate vector DB to improve selector accuracy and reduce token usage    |                                                                          |
+|                                      |                                                                | [x] Leverage Agentica system prompts (selector / caller / describer patterns) |                                                                          |
+|                                      |                                                                | [ ] Evaluate and improve orchestration executor accuracy                       |                                                                          |
+
+## Contributing
+
+Please read our [contribution guidelines](./CONTRIBUTING.md) to get started.  
+Whether it’s bug reports, new features, or improvements, your help is appreciated.

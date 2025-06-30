@@ -14,5 +14,13 @@
   "homepage": "https://github.com/orchestrica/orchestrica",
   "dependencies": {
     "@orchestrica/cli": "^0.0.1"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "vitest": "^3.2.4"
   }
 }

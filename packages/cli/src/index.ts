@@ -2,14 +2,14 @@
 
 import { Command } from "commander";
 import { createConnector, startAgentSession } from "./connector";
-import { selectAgentMenu, handleMcpServerMode } from "./menu";
+import { selectAgentMenu, handleAPIServerMode } from "./menu";
 
 const program = new Command();
 
 async function main() {
   const connector = await createConnector();
   const service = connector.getDriver();
-  const agents = ["orca", "orca-mcp-server"];
+  const agents = ["orca", "orca-api-server"];
 
   while (true) {
     const agentName = await selectAgentMenu(agents);
@@ -18,8 +18,8 @@ async function main() {
       connector.close();
       break;
     }
-    if (agentName === "orca-mcp-server") {
-      await handleMcpServerMode(service);
+    if (agentName === "orca-api-server") {
+      await handleAPIServerMode(service);
     } else {
       await startAgentSession(agentName, service);
     }

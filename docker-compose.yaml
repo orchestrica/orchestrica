@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  orca-agent:
+    image: orca-agent:latest
+    container_name: orca-agent
+    ports:
+      - "3001:3001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped

@@ -1,6 +1,6 @@
-# orca-mcp-server
+# orca-api-server
 
-`orca-mcp-server` is the central MCP (Model Context Protocol) service used by Orchestrica to manage and orchestrate AI agents. It supports agent template management, dynamic agent registry, and Redis-based state persistence. This server is stateless and interacts with persistent storage and the agent orchestrator (orca-agent).
+`orca-api-server` is the central API service used by Orchestrica to manage and orchestrate AI agents. It supports agent template management, dynamic agent registry, and Redis-based state persistence. This server is stateless and interacts with persistent storage and the agent orchestrator (orca-agent).
 
 ---
 
@@ -74,7 +74,7 @@ Flush the in-memory template cache (if applicable).
 ### Installation
 
 ```bash
-cd packages/orca-mcp-server
+cd packages/orca-api-server
 npm install
 ```
 

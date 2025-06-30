@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selectAgentMenu = selectAgentMenu;
-exports.handleMcpServerMode = handleMcpServerMode;
+exports.handleAPIServerMode = handleAPIServerMode;
 const inquirer_1 = __importDefault(require("inquirer"));
 const utils_1 = require("./utils");
 const readline_1 = __importDefault(require("readline"));
@@ -28,7 +28,7 @@ async function selectAgentMenu(agents) {
     ]);
     return result.agent === "Exit" ? null : result.agent;
 }
-async function handleMcpServerMode(service) {
+async function handleAPIServerMode(service) {
     while (true) {
         try {
             console.clear();
