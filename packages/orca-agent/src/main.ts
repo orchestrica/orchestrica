@@ -14,6 +14,10 @@ import typia from "typia";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 
+import { BootAgenticaVectorSelector } from "@agentica/vector-selector";
+import { configureSqliteStrategy } from "@agentica/vector-selector/strategy";
+import Database from "better-sqlite3";
+
 dotenv.config();
 
 async function main() {
@@ -23,6 +27,14 @@ async function main() {
     IAgenticaRpcListener
   > = new WebSocketServer();
   console.log("🟢 Server is starting on ws://localhost:3001");
+  const db = new Database(":memory:");
+
+  const selectorExecute = BootAgenticaVectorSelector({
+    strategy: configureSqliteStrategy<"chatgpt">({
+      db: db,
+      cohereApiKey: process.env.COHERE_API_KEY || "",
+    }),
+  });
 
   await server.open(3001, async (acceptor) => {
     const openai = new OpenAI({
@@ -72,6 +84,9 @@ async function main() {
           execute: () => EXECUTE_SYSTEM_PROMPT_EN,
           describe: () => DESCRIBE_SYSTEM_PROMPT_EN,
           cancel: () => CANCEL_SYSTEM_PROMPT_EN,
+        },
+        executor: {
+          select: selectorExecute,
         },
       },
     });
