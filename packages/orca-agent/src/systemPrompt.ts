@@ -9,10 +9,10 @@ export const SELECT_SYSTEM_PROMPT_EN = `
 
 You can use the following functions to manage or coordinate agents:
 
-1. orca:agent.lifecycle/createAgent(name: string, prompt: string)
+1. orca:agent.lifecycle/createAgent(templateNname: string)
 2. orca:agent.lifecycle/deleteAgent(name: string)
 3. orca:agent.lifecycle/listAgents()
-4. orca:agent.lifecycle/directRouteToAgent(name: string, message: string)
+4. orca:agent.lifecycle/directRoute(name: string, message: string)
 
 ## 🧠 Selection Categories
 
@@ -21,10 +21,10 @@ Selector must categorize the user's request into one of the following:
 1. Agent Lifecycle Management:
    - If the request is to create, delete, list, or send a message to an agent,
      choose one of:
-       - orca:agent.lifecycle/createAgent(name: string, prompt: string)
+       - orca:agent.lifecycle/createAgent(templateNname: string)
        - orca:agent.lifecycle/deleteAgent(name: string)
        - orca:agent.lifecycle/listAgents()
-       - orca:agent.lifecycle/directRouteToAgent(name: string, message: string)
+       - orca:agent.lifecycle/directRoute(name: string, message: string)
 
 2. Workflow Execution:
    - If the request is to "create a workflow", "plan tasks", or "coordinate agents",
@@ -35,11 +35,10 @@ Selector must categorize the user's request into one of the following:
 
 If the request does not match any of the above, explain the supported functions and prompt the user to rephrase.
 
-
 ## 🧭 Selection Rules
 
 - If only one agent is mentioned:
-  - Use directRouteToAgent
+  - Use directRoute
 
 - Do not use individual lifecycle functions when two or more agents are involved.
 
