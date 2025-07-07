@@ -98,16 +98,24 @@ type HierarchicalWorkflowInput = {
 };
 
 /**
- * DTO for executing a sequential workflow involving multiple agents.
+ * DTO for executing a sequential workflow involving multiple agents and actions.
  *
  * Selected when the user asks to run tasks one after another in order,
  * using keywords like "step-by-step", "then", "after that", or "sequentially".
  *
+ * Each step contains:
+ *   - agent: The name of the agent to invoke for this step.
+ *   - action: (optional) The specific action or instruction to be performed by the agent at this step.
+ *
+ * The `action` field is parsed from the user's request and represents the explicit task, query, or operation
+ * that the agent should perform. For example, if the user says "First, google wrtn을 검색", the agent is "google"
+ * and the action is "wrtn을 검색". If omitted, the default behavior of the agent applies.
+ *
  * Example input:
  * {
  *   steps: [
- *     { agent: "summarizer" },
- *     { agent: "translator" }
+ *     { agent: "google", action: "wrtn을 검색" },
+ *     { agent: "summarizer", action: "summarize the search result" }
  *   ]
  * }
  */
@@ -115,6 +123,12 @@ type SequentialWorkflowInput = {
   steps: Array<{
     /** Name of the agent to invoke at this step */
     agent: string;
+    /**
+     * The specific action or instruction for the agent to perform.
+     * Parsed from the user request, this field describes what the agent should do at this step.
+     * If omitted, the agent executes its default behavior.
+     */
+    action?: string;
   }>;
 };
 
@@ -154,7 +168,7 @@ export class WorkflowTool {
   /**
    * Create an agent from a template using the given name and store it in memory.
    *
-   * Supported agent templates: "web", "notion", "analyst", and "default".
+   * Supported agent templates: "web", "notion", "analyst", "google", and "default".
    * If the provided name does not match any of the above, the "default" template is used as fallback.
    *
    * @param input Contains the name (unique identifier) and prompt used to initialize the agent.
@@ -299,7 +313,25 @@ export class WorkflowTool {
         throw new Error(`Agent "${input.name}" could not be loaded from Redis.`);
       }
     }
+    console.log("input.message", input.message)
     const result = await agent.conversate(input.message);
+    const tokenUsage = agent.getTokenUsage();
+
+    console.log("tokenUsage", tokenUsage)
+    console.log(
+      "result",
+      JSON.stringify(
+        result.map((item) => {
+          if (typeof item.toJSON === "function") {
+            return item.toJSON();
+          }
+          return item;
+        }),
+        null,
+        2
+      )
+    );
+
     return {
       success: true,
       prompt: input.message,
@@ -367,24 +399,38 @@ export class WorkflowTool {
    * This function is selected when the user wants agents to be executed
    * step-by-step in the given order.
    *
+   * The `action` field in each step will be passed verbatim as the prompt to the agent.
+   * The output of each step will then be provided as input to the next agent without modification.
+   * Therefore, you should write the action so that the result is directly usable by the next agent.
+   * For example, if the first agent searches for 'wrtn', the action should specify formatting the result
+   * as a Notion-ready text. This allows the next Notion agent to upload it without additional transformation.
+   *
    * Example input:
    * {
    *   steps: [
-   *     { agent: "summarizer" },
-   *     { agent: "translator" }
+   *     { agent: "google", action: "Search for wrtn and format as Notion-ready text" },
+   *     { agent: "notion", action: "Upload the received Notion-ready text to Notion" }
    *   ]
    * }
    *
-   * @param input SequentialWorkflowInput - An array of agents to execute in sequence.
-   * @returns Execution result
+   * @param input SequentialWorkflowInput - An array of agents (with optional actions) to execute in sequence.
+   * @returns Execution result with formatted step descriptions.
    */
   async sequentialWorkflow(input: SequentialWorkflowInput): Promise<any> {
     console.log("[sequentialWorkflow] Received input:", JSON.stringify(input, null, 2));
-    // You can iterate and invoke agents here in order
+    // Format: agent: <agent> / action: <action>
+    const formattedSteps = input.steps.map(
+      (step) => {
+        if (step.action) {
+          return `agent: ${step.agent} / action: ${step.action}`;
+        }
+        return `agent: ${step.agent}`;
+      }
+    );
     return {
       success: true,
       message: "Sequential Workflow executed",
-      input,
+      steps: formattedSteps,
     };
   }
 }
