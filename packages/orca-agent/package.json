@@ -13,15 +13,16 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "ts-node": "^10.9.2",
     "ts-patch": "^3.3.0",
     "typescript": "~5.8.2"
   },
   "dependencies": {
-    "@agentica/core": "^0.27.3",
-    "@agentica/rpc": "^0.27.3",
+    "@agentica/core": "^0.29.0",
+    "@agentica/rpc": "^0.29.0",
     "dotenv": "^16.4.7",
-    "openai": "^4.87.3",
+    "openai": "^5.2.0",
     "puppeteer": "^24.10.1",
     "redis": "^5.5.6",
     "tgrid": "^1.1.0",

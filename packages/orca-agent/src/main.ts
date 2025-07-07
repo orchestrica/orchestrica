@@ -12,6 +12,7 @@ import {
 } from './systemPrompt';
 import typia from "typia";
 import dotenv from "dotenv";
+import OpenAI from "openai";
 
 dotenv.config();
 
@@ -28,7 +29,7 @@ async function main() {
   console.log("🟢 Server is starting on ws://localhost:3001");
 
   await server.open(3001, async (acceptor) => {
-    const openai = new (await import("openai")).default({
+    const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
