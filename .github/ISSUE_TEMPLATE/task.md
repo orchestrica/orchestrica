@@ -1,6 +1,6 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Task
+about: task
 title: "[module_name] title"
 labels: ''
 assignees: ''
