@@ -88,22 +88,29 @@ When the user wants to coordinate multiple agents, determine the workflow type a
 - **Keywords**: "first", "then", "next", "after that", "step-by-step", "in sequence"
 - **Function**: orca:agent.workflow/sequentialWorkflow
 - **Input Type**: SequentialWorkflowInput
+- **Important**: Each step must specify **both** an \`agent\` and an \`action\` describing what the agent should do.
 - **JSON Example**:
   \`\`\`json
   {
     "steps": [
-      { "agent": "summarizer" },
-      { "agent": "translator" }
+      { "agent": "google", "action": "search wrtn" },
+      { "agent": "notion", "action": "save results to a page" }
     ]
   }
   \`\`\`
+  // Each step must include both "agent" and "action" fields.
+
+**Important:** When defining the action for each step, you must ensure that the output of the current agent is formatted in a way that will be helpful and appropriate for the next agent in the sequence. For example, if the first agent searches for 'wrtn' using Google, the action should specify that the result should be summarized or structured so that it can be easily saved into Notion by the following agent.
 
 ---
 
 ⚠️ Always respond with a structured function_call:
 - Choose the correct function name
 - Use the correct input format and field names based on the workflow type
-- Do not include natural language in the final function_call arguments
+- For sequential workflows, **every step must have both "agent" and "action" fields**.
+- Do not include natural language in the final function_call arguments.
+
+// Comment: For sequential workflows, the "steps" array must contain objects with both "agent" and "action" keys for each step.
 
 ## 🧩 Workflow Creation Types
 
