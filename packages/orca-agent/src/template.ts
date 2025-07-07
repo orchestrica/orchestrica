@@ -3,6 +3,7 @@ import { OpenAI } from "openai";
 import typia from "typia";
 import { WebBrowserTool } from "./tools";
 import type { IAgenticaHistoryJson } from "@agentica/core";
+import { GoogleSearchService } from "@wrtnlabs/connector-google-search";
 
 export async function selectTemplate(
   name: string,
@@ -21,6 +22,17 @@ export async function selectTemplate(
     },
   ];
 
+  const googleSearchControllers = [
+    {
+      name: "orca:google-search",
+      protocol: "class",
+      application: typia.llm.application<GoogleSearchService, "chatgpt">(),
+      execute: new GoogleSearchService({
+        serpApiKey: process.env.SERPAPI_API_KEY!,
+      }),
+    },
+  ];
+
   const configMap: Record<string, { prompt: string; controllers: any[] }> = {
     analyst: {
       prompt: "You're a data analyst. Provide clear, structured insights.",
@@ -33,6 +45,10 @@ export async function selectTemplate(
     web: {
       prompt: "You're a browser automation agent. You can search and interact with web pages using the API.",
       controllers: webBrowserControllers,
+    },
+    google: {
+      prompt: "You're a google search agent. You can search the web using the API.",
+      controllers: googleSearchControllers,
     },
     default: {
       prompt: "",
