@@ -2,12 +2,11 @@ import { useNavigate } from "react-router";
 import { useFetch } from "../../../hooks/useFetch";
 import ChatHistory from "./ChatHistory";
 
-const agentId = 1;
-function ChatHistoryList() {
+function ChatHistoryList({ agentId }: { agentId: string }) {
   const { data: histories } = useFetch<any[]>(agentId ? `/getHistories?agentId=${agentId}` : '');
   const navigate = useNavigate();
   const handleClick = (id: number) => {
-    navigate(`/chat/${id}`)
+    navigate(`/chat/${agentId}/${id}`)
   }
   return (
     <div>

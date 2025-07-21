@@ -26,8 +26,11 @@ interface AgenticaRpcContextType {
 }
 
 const AgenticaRpcContext = createContext<AgenticaRpcContextType | null>(null);
+interface CustomAgenticaRpcProviderProps {
+  agentId: string, historyId?: string
+}
 
-export function AgenticaRpcProvider({ children }: PropsWithChildren) {
+export function AgenticaRpcProvider({ children, agentId, historyId }: PropsWithChildren & CustomAgenticaRpcProviderProps) {
   const [messages, setMessages] = useState<IAgenticaEventJson[]>([]);
   const [isError, setIsError] = useState(false);
   const [driver, setDriver] =
