@@ -24,6 +24,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "allowUnreachableCode": true
   },
   "include": [
     "src"

@@ -7,6 +7,7 @@ import DashboardLayout from './components/layout/DashboardLayout/DashboardLayout
 import AgentListPage from './pages/Agent/AgentListPage';
 import AgentPage from './pages/Agent/Agent/AgentPage';
 import ChatPage from './pages/Chat/ChatPage';
+import Test from './Test';
 
 const router = createBrowserRouter([
   {
@@ -21,10 +22,6 @@ const router = createBrowserRouter([
             Component: HomePage,
           },
           {
-            path: 'chat',
-            Component: ChatPage,
-          },
-          {
             path: 'agent',
             Component: AgentListPage,
           },
@@ -34,6 +31,22 @@ const router = createBrowserRouter([
           }]
       },
     ],
+  }, {
+    Component: Test,
+    children: [
+      {
+        path: '/chat',
+        Component: ChatPage
+      },
+      {
+        path: '/chat/:agentId',
+        Component: ChatPage
+      },
+      {
+        path: '/chat/:agentId/:historyId',
+        Component: ChatPage
+      }
+    ]
   }
 ])
 
